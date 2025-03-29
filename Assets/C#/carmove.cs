@@ -2,56 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using TMPro; // 添加 TMPro 命名空间
+using TMPro;
 
 public class carmove : MonoBehaviour
 {
     private Rigidbody rb;
     private float moveX;
     private float moveY;
-    private float moveSpeed = 20;
+    private float moveSpeed = 5f;
+    private float turnSpeed = 40f; // Turning speed
     private int count;
-    public TextMeshProUGUI countText; // 确保在 Unity 中关联了 UI 文本组件
+    public TextMeshProUGUI countText; // Ensure the UI text component is assigned in Unity
     public AudioSource clickAudio;
-
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        count = 0; // 初始化分数
-        SetCountText(); // 初始显示分数
+        count = 0; // Initialize score
+        SetCountText(); // Display initial score
     }
 
     public void OnMove(InputValue movevalue)
     {
         Vector2 moveVector = movevalue.Get<Vector2>();
-        moveX = moveVector.x;
-        moveY = moveVector.y;
+        moveX = moveVector.x; // Horizontal input (turning)
+        moveY = moveVector.y; // Vertical input (forward/backward)
     }
 
     private void FixedUpdate()
     {
-        Vector3 movement = new Vector3(moveX, 0.0f, moveY);
+        // Movement logic
+        Vector3 movement = transform.forward * moveY; // Use the car's forward vector
         rb.velocity = movement.normalized * moveSpeed;
+
+        // Turning logic
+        float turn = moveX * turnSpeed * Time.fixedDeltaTime; // Calculate turning angle
+        Quaternion turnRotation = Quaternion.Euler(0, turn, 0); // Create rotation quaternion
+        rb.MoveRotation(rb.rotation * turnRotation); // Apply turning
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        // 检查标签是否为 "pk"
+        // Check if the tag is "pk"
         if (other.CompareTag("pk"))
         {
-            count += 1; // 增加分数
-            SetCountText(); // 更新UI
-            Destroy(other.gameObject); // 销毁物体
-            //other.gameObject.SetActive(false);
+            count += 1; // Increase score
+            SetCountText(); // Update UI
+            Destroy(other.gameObject); // Destroy the object
             clickAudio.Play();
-
         }
     }
 
     void SetCountText()
     {
-        if (countText != null) // 防止空引用异常
+        if (countText != null) // Prevent null reference exception
             countText.text = "Score: " + count.ToString();
     }
 }
