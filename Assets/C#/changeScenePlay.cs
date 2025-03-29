@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class changeScene : MonoBehaviour
+public class changeScenePlay : MonoBehaviour
 {
     // 通过场景编号加载场景
     public void LoadMyScene(int sceneNumber)
@@ -23,7 +23,7 @@ public class changeScene : MonoBehaviour
     // 协程：处理 int 类型参数
     private IEnumerator PlayMySound(int sceneNumber)
     {
-        yield return new WaitForSeconds(1.5f); // 等待3秒
+        yield return new WaitForSeconds(0.5f); // 等待3秒
         SceneManager.LoadScene(sceneNumber); // 正确拼写 SceneManager
     }
 
