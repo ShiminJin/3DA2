@@ -5,29 +5,28 @@ using UnityEngine.SceneManagement;
 
 public class changeScenePlay : MonoBehaviour
 {
-    // 通过场景编号加载场景
+    // Load scene by build index
     public void LoadMyScene(int sceneNumber)
     {
 
-        StartCoroutine(PlayMySound(sceneNumber)); // 使用方法引用
+        StartCoroutine(PlayMySound(sceneNumber)); // Load scene by name
         //SceneManager.LoadScene(sceneNumber);
     }
 
-    // 通过场景名称加载场景
+    // Delayed load for int parameter
     public void LoadMyScene(string sceneName)
     {
         SceneManager.LoadScene(sceneName);
-        StartCoroutine(PlayMySound(sceneName)); // 重载协程以处理字符串参数
+        StartCoroutine(PlayMySound(sceneName)); 
     }
 
-    // 协程：处理 int 类型参数
+    // Immediate load for string parameter
     private IEnumerator PlayMySound(int sceneNumber)
     {
-        yield return new WaitForSeconds(0.5f); // 等待3秒
-        SceneManager.LoadScene(sceneNumber); // 正确拼写 SceneManager
+        yield return new WaitForSeconds(0.5f); 
+        SceneManager.LoadScene(sceneNumber); 
     }
 
-    // 协程：处理 string 类型参数
     private IEnumerator PlayMySound(string sceneName)
     {
         yield return new WaitForSeconds(0f);
